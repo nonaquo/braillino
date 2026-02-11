@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works — Braillino</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --butter: #FFF4DC;
+            --pink: #FFD5E5;
+            --blue: #C8E0F4;
+            --peach: #FFE5CC;
+            --brown: #3A2F2F;
+            --cream: #FFF9F0;
+        }
+
+        body {
+            font-family: 'Karla', sans-serif;
+            background: var(--butter);
+            color: var(--brown);
+            line-height: 1.6;
+        }
+
+        nav {
+            background: var(--brown);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--brown);
+        }
+
+        .nav-left {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-left a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: opacity 0.2s;
+            font-weight: 400;
+        }
+
+        .nav-left a:hover {
+            opacity: 0.7;
+        }
+
+        .logo {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 24px;
+            color: var(--cream);
+            letter-spacing: -0.01em;
+        }
+
+        .hero {
+            background: var(--blue);
+            padding: 100px 40px;
+            text-align: center;
+            border-bottom: 3px solid var(--brown);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: white;
+            border-radius: 50%;
+            top: -100px;
+            right: 10%;
+            opacity: 0.4;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 50%;
+            bottom: -90px;
+            left: 15%;
+            opacity: 0.4;
+        }
+
+        h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(48px, 7vw, 72px);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        .step-grid {
+            display: grid;
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .step-number {
+            background: var(--pink);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 48px;
+            font-weight: 700;
+            border: 3px solid var(--brown);
+            flex-shrink: 0;
+        }
+
+        .step-content h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 32px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .step-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            opacity: 0.85;
+        }
+
+        .step-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 16px;
+        }
+
+        .step-content ul li {
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 8px;
+            opacity: 0.85;
+        }
+
+        .step-content ul li::before {
+            content: '✿';
+            position: absolute;
+            left: 0;
+            color: var(--brown);
+        }
+
+        .requirements {
+            background: var(--peach);
+            padding: 60px;
+            border: 3px solid var(--brown);
+            margin-bottom: 80px;
+            box-shadow: 12px 12px 0 rgba(58, 47, 47, 0.1);
+        }
+
+        .requirements h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 32px;
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .req-item {
+            background: white;
+            padding: 32px;
+            border: 3px solid var(--brown);
+            text-align: center;
+        }
+
+        .req-item h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .req-item p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--pink);
+            border: 3px solid var(--brown);
+            box-shadow: 12px 12px 0 rgba(58, 47, 47, 0.1);
+        }
+
+        .cta h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 36px;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        .cta p {
+            font-size: 18px;
+            margin-bottom: 32px;
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 48px;
+            background: var(--brown);
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            border: 3px solid var(--brown);
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: var(--cream);
+            color: var(--brown);
+        }
+
+        footer {
+            background: var(--brown);
+            padding: 32px 40px;
+            text-align: center;
+            color: var(--cream);
+            margin-top: 80px;
+        }
+
+        footer p {
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            nav, .hero, .content, .requirements, .cta {
+                padding: 24px;
+            }
+
+            .step {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .step-number {
+                width: 80px;
+                height: 80px;
+                font-size: 36px;
+                margin: 0 auto;
+            }
+
+            .req-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+        .step:nth-child(4) { animation-delay: 0.4s; }
+
+        .requirements {
+            animation: fadeInUp 0.6s ease 0.5s forwards;
+            opacity: 0;
+        }
+
+        .cta {
+            animation: fadeInUp 0.6s ease 0.6s forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="how-it-works.html">How It Works</a>
+            <a href="about.html">About</a>
+        </div>
+        <div class="logo"><a href="index.html" style="color: var(--cream); text-decoration: none;">braillino</a></div>
+        <div style="width: 120px;"></div>
+    </nav>
+
+    <section class="hero">
+        <h1>How It Works</h1>
+        <p class="subtitle">
+            Transform your text into tactile Braille in four simple steps
+        </p>
+    </section>
+
+    <div class="content">
+        <div class="step-grid">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h2>Upload Arduino Code</h2>
+                    <p>First, you'll need to upload the Braillino code to your Arduino board:</p>
+                    <ul>
+                        <li>Open Arduino IDE on your computer</li>
+                        <li>Copy and paste the provided .ino code</li>
+                        <li>Select your Arduino board type (Tools → Board)</li>
+                        <li>Select the correct port (Tools → Port)</li>
+                        <li>Click the upload button (→ arrow icon)</li>
+                        <li>Wait for "Done uploading" message</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h2>Connect Your Device</h2>
+                    <p>Once your Arduino is programmed, it's time to connect it to the web app:</p>
+                    <ul>
+                        <li>Keep your Arduino plugged into your computer via USB</li>
+                        <li>Open the Braillino website in Chrome or Edge browser</li>
+                        <li>Click the "Connect Device" button</li>
+                        <li>Select your Arduino from the popup window</li>
+                        <li>Wait for the status indicator to show "CONNECTED"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h2>Type Your Message</h2>
+                    <p>Now you're ready to convert text into Braille:</p>
+                    <ul>
+                        <li>Type any word or sentence (A-Z letters and spaces)</li>
+                        <li>Maximum 100 characters per message</li>
+                        <li>The text is automatically converted to uppercase</li>
+                        <li>Press Enter or click "Send to Braille"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h2>Experience Braille</h2>
+                    <p>Watch your Arduino bring the text to life:</p>
+                    <ul>
+                        <li>The servos will move to form each letter in Braille</li>
+                        <li>Each character displays for 4 seconds</li>
+                        <li>Double letters (like "LL" in HELLO) show a brief gap</li>
+                        <li>After the word finishes, enter a new message to continue</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="requirements">
+            <h2>What You'll Need</h2>
+            <div class="req-grid">
+                <div class="req-item">
+                    <h3>Hardware</h3>
+                    <p>Arduino board (Uno or Nano) with 2 servo motors connected to pins 9 and 10</p>
+                </div>
+                <div class="req-item">
+                    <h3>Software</h3>
+                    <p>Arduino IDE installed on your computer for uploading code to the board</p>
+                </div>
+                <div class="req-item">
+                    <h3>Browser</h3>
+                    <p>Chrome or Edge browser (required for Web Serial API support)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta">
+            <h2>Ready to get started?</h2>
+            <p>Head to the converter and bring your words to life</p>
+            <a href="index.html" class="cta-button">Start Converting</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Braillino · Making text accessible through touch</p>
+    </footer>
+</body>
+</html>
