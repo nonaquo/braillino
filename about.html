@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — Braillino</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --butter: #FFF4DC;
+            --pink: #FFD5E5;
+            --blue: #C8E0F4;
+            --peach: #FFE5CC;
+            --brown: #3A2F2F;
+            --cream: #FFF9F0;
+        }
+
+        body {
+            font-family: 'Karla', sans-serif;
+            background: var(--butter);
+            color: var(--brown);
+            line-height: 1.6;
+        }
+
+        nav {
+            background: var(--brown);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--brown);
+        }
+
+        .nav-left {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-left a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: opacity 0.2s;
+            font-weight: 400;
+        }
+
+        .nav-left a:hover {
+            opacity: 0.7;
+        }
+
+        .logo {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 24px;
+            color: var(--cream);
+            letter-spacing: -0.01em;
+        }
+
+        .hero {
+            background: var(--pink);
+            padding: 100px 40px;
+            text-align: center;
+            border-bottom: 3px solid var(--brown);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: white;
+            border-radius: 50%;
+            top: -100px;
+            right: 10%;
+            opacity: 0.4;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 50%;
+            bottom: -90px;
+            left: 15%;
+            opacity: 0.4;
+        }
+
+        h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(48px, 7vw, 72px);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        .story {
+            background: var(--peach);
+            padding: 60px;
+            border: 3px solid var(--brown);
+            margin-bottom: 60px;
+            box-shadow: 12px 12px 0 rgba(58, 47, 47, 0.1);
+        }
+
+        .story h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 36px;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        .story p {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            opacity: 0.85;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .value-card {
+            background: white;
+            padding: 40px;
+            border: 3px solid var(--brown);
+            text-align: center;
+        }
+
+        .value-card h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 24px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .value-card p {
+            font-size: 16px;
+            line-height: 1.7;
+            opacity: 0.8;
+        }
+
+        .mission {
+            background: var(--blue);
+            padding: 80px 60px;
+            text-align: center;
+            border: 3px solid var(--brown);
+            box-shadow: 12px 12px 0 rgba(58, 47, 47, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 50%;
+            top: -80px;
+            left: -60px;
+            opacity: 0.3;
+        }
+
+        .mission::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: white;
+            border-radius: 50%;
+            bottom: -60px;
+            right: -40px;
+            opacity: 0.3;
+        }
+
+        .mission h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 42px;
+            margin-bottom: 24px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mission p {
+            font-size: 20px;
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.85;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tech-stack {
+            background: var(--cream);
+            padding: 60px;
+            border: 3px solid var(--brown);
+            text-align: center;
+        }
+
+        .tech-stack h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 32px;
+            margin-bottom: 32px;
+            font-weight: 700;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .tech-item {
+            padding: 12px 24px;
+            background: var(--brown);
+            color: var(--cream);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        footer {
+            background: var(--brown);
+            padding: 32px 40px;
+            text-align: center;
+            color: var(--cream);
+            margin-top: 80px;
+        }
+
+        footer p {
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            nav, .hero, .content, .story, .mission, .tech-stack {
+                padding: 24px;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .story {
+            animation: fadeInUp 0.6s ease 0.1s forwards;
+            opacity: 0;
+        }
+
+        .values-grid {
+            animation: fadeInUp 0.6s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .mission {
+            animation: fadeInUp 0.6s ease 0.3s forwards;
+            opacity: 0;
+        }
+
+        .tech-stack {
+            animation: fadeInUp 0.6s ease 0.4s forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="how-it-works.html">How It Works</a>
+            <a href="about.html">About</a>
+        </div>
+        <div class="logo"><a href="index.html" style="color: var(--cream); text-decoration: none;">braillino</a></div>
+        <div style="width: 120px;"></div>
+    </nav>
+
+    <section class="hero">
+        <h1>About Braillino</h1>
+        <p class="subtitle">
+            Bridging the gap between digital text and tactile Braille
+        </p>
+    </section>
+
+    <div class="content">
+        <div class="story">
+            <h2>Our Story</h2>
+            <p>
+                Braillino was created with a simple but powerful goal: to make text accessible through touch. 
+                We believe that everyone should be able to experience written words in a way that works for them.
+            </p>
+            <p>
+                By combining Arduino hardware with an intuitive web interface, we've made it possible for 
+                anyone to convert digital text into physical Braille patterns instantly. What started as 
+                a project has grown into a tool that brings words to life through technology.
+            </p>
+        </div>
+
+        <div class="values-grid">
+            <div class="value-card">
+                <h3>✿ Accessibility</h3>
+                <p>Making information available to everyone, regardless of how they experience the world</p>
+            </div>
+            <div class="value-card">
+                <h3>✿ Simplicity</h3>
+                <p>Complex technology should feel effortless and intuitive to use</p>
+            </div>
+            <div class="value-card">
+                <h3>✿ Innovation</h3>
+                <p>Combining hardware and software to create new ways of interacting with text</p>
+            </div>
+        </div>
+
+        <div class="mission">
+            <h2>Our Mission</h2>
+            <p>
+                To create technology that breaks down barriers and opens up new ways of 
+                experiencing information. We're committed to making the digital world more 
+                accessible, one word at a time.
+            </p>
+        </div>
+
+        <div class="tech-stack">
+            <h2>Built With</h2>
+            <div class="tech-list">
+                <span class="tech-item">Arduino</span>
+                <span class="tech-item">Web Serial API</span>
+                <span class="tech-item">HTML & CSS</span>
+                <span class="tech-item">JavaScript</span>
+                <span class="tech-item">Servo Motors</span>
+                <span class="tech-item">Braille Grade 1</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Braillino · Making text accessible through touch</p>
+    </footer>
+</body>
+</html>

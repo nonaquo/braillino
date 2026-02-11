@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Braillino — Text to Braille</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --butter: #FFF4DC;
+            --pink: #FFD5E5;
+            --blue: #C8E0F4;
+            --peach: #FFE5CC;
+            --brown: #3A2F2F;
+            --cream: #FFF9F0;
+        }
+
+        body {
+            font-family: 'Karla', sans-serif;
+            background: var(--butter);
+            color: var(--brown);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--brown);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--brown);
+        }
+
+        .nav-left {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-left a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: opacity 0.2s;
+            font-weight: 400;
+        }
+
+        .nav-left a:hover {
+            opacity: 0.7;
+        }
+
+        .logo {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 24px;
+            color: var(--cream);
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-right a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: opacity 0.2s;
+        }
+
+        .status-badge {
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--cream);
+            letter-spacing: 0.08em;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s;
+        }
+
+        .status-dot.connected {
+            background: #A8E6CF;
+            box-shadow: 0 0 10px rgba(168, 230, 207, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--pink);
+            padding: 80px 40px;
+            text-align: center;
+            border-bottom: 3px solid var(--brown);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 50%;
+            top: -100px;
+            right: 10%;
+            opacity: 0.6;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: white;
+            border-radius: 50%;
+            bottom: -75px;
+            left: 15%;
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-tag {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: rgba(58, 47, 47, 0.7);
+        }
+
+        h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(48px, 7vw, 80px);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            margin-bottom: 32px;
+            opacity: 0.8;
+        }
+
+        /* Category Nav */
+        .category-nav {
+            background: var(--cream);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            border-bottom: 3px solid var(--brown);
+            flex-wrap: wrap;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            color: var(--brown);
+        }
+
+        .category-item::before {
+            content: '✿';
+            font-size: 16px;
+            color: var(--brown);
+        }
+
+        /* Main Content */
+        .main-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 70vh;
+            border-bottom: 3px solid var(--brown);
+        }
+
+        .left-panel {
+            background: var(--blue);
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 50%;
+            top: 20%;
+            left: -60px;
+            opacity: 0.4;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            bottom: 15%;
+            right: -40px;
+            opacity: 0.4;
+        }
+
+        .panel-content {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+        }
+
+        .panel-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(32px, 4vw, 48px);
+            line-height: 1.2;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        .panel-text {
+            font-size: 16px;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+
+        .right-panel {
+            background: var(--peach);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .input-container {
+            background: white;
+            border: 3px solid var(--brown);
+            border-radius: 0;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 8px 8px 0 rgba(58, 47, 47, 0.1);
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: var(--brown);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 20px;
+            font-family: 'Karla', sans-serif;
+            font-size: 18px;
+            border: 2px solid var(--brown);
+            background: var(--cream);
+            color: var(--brown);
+            resize: vertical;
+            transition: all 0.3s;
+            border-radius: 0;
+        }
+
+        textarea:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(58, 47, 47, 0.1);
+        }
+
+        textarea::placeholder {
+            color: rgba(58, 47, 47, 0.4);
+            font-style: italic;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            margin-top: 8px;
+            opacity: 0.6;
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+        }
+
+        button {
+            flex: 1;
+            padding: 18px 32px;
+            font-family: 'Karla', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: var(--brown);
+            color: var(--cream);
+            border: 3px solid var(--brown);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--cream);
+            transition: left 0.3s ease;
+            z-index: 0;
+        }
+
+        button:hover:not(:disabled)::before {
+            left: 0;
+        }
+
+        button:hover:not(:disabled) {
+            color: var(--brown);
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .connect-btn {
+            flex: 0.8;
+        }
+
+        .connect-btn.connected {
+            background: #A8E6CF;
+            border-color: #A8E6CF;
+            color: var(--brown);
+        }
+
+        .send-btn:disabled {
+            background: rgba(58, 47, 47, 0.2);
+            border-color: rgba(58, 47, 47, 0.2);
+        }
+
+        /* Footer Grid */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: var(--cream);
+            border-bottom: 3px solid var(--brown);
+        }
+
+        .footer-card {
+            padding: 60px 40px;
+            text-align: center;
+            border-right: 3px solid var(--brown);
+        }
+
+        .footer-card:last-child {
+            border-right: none;
+        }
+
+        .footer-card h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 18px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .footer-card p {
+            font-size: 14px;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--brown);
+            padding: 32px 40px;
+            text-align: center;
+            color: var(--cream);
+        }
+
+        footer p {
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-section {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-card {
+                border-right: none;
+                border-bottom: 3px solid var(--brown);
+            }
+
+            .footer-card:nth-child(odd) {
+                border-right: 3px solid var(--brown);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav, .hero, .category-nav, .left-panel, .right-panel {
+                padding: 24px;
+            }
+
+            .nav-left, .nav-right {
+                gap: 16px;
+            }
+
+            .category-nav {
+                gap: 16px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-card:nth-child(odd) {
+                border-right: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .panel-content {
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .input-container {
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+            opacity: 0;
+        }
+
+        .button-group {
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-left">
+            <a href="how-it-works.html">How It Works</a>
+            <a href="about.html">About</a>
+        </div>
+        <div class="logo"><a href="index.html" style="color: var(--cream); text-decoration: none;">braillino</a></div>
+        <div class="nav-right">
+            <div class="status-badge">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">OFFLINE</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-tag">Text to Braille Converter</div>
+            <h1>Words, made<br>accessible by touch. ✿</h1>
+            <p class="hero-subtitle">
+                Transform your messages into tactile Braille patterns
+            </p>
+        </div>
+    </section>
+
+    <!-- Category Nav -->
+    <div class="category-nav">
+        <div class="category-item">Connect</div>
+        <div class="category-item">Type</div>
+        <div class="category-item">Convert</div>
+        <div class="category-item">Feel</div>
+    </div>
+
+    <!-- Main Content -->
+    <section class="main-section">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <div class="panel-content">
+                <h2 class="panel-title">Type anything, feel everything</h2>
+                <p class="panel-text">
+                    Connect your Arduino device and watch your words transform into physical Braille patterns. 
+                    Every letter, every word—felt and understood.
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <div class="input-container">
+                <label for="textInput">Your Message</label>
+                <textarea 
+                    id="textInput" 
+                    placeholder="Type your message here..."
+                    maxlength="100"
+                    spellcheck="false"
+                ></textarea>
+                <div class="char-counter">
+                    <span id="charCount">0</span> / 100 characters
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="connectBtn" class="connect-btn">
+                    <span>Connect Device</span>
+                </button>
+                <button id="sendBtn" class="send-btn" disabled>
+                    <span>Send to Braille</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Grid -->
+    <div class="footer-grid">
+        <div class="footer-card">
+            <h3>Step 1</h3>
+            <p>Connect your Arduino device via USB cable</p>
+        </div>
+        <div class="footer-card">
+            <h3>Step 2</h3>
+            <p>Type your message in the text box</p>
+        </div>
+        <div class="footer-card">
+            <h3>Step 3</h3>
+            <p>Click send to convert to Braille</p>
+        </div>
+        <div class="footer-card">
+            <h3>Step 4</h3>
+            <p>Feel the Braille pattern in real time</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Braillino · Works with Chrome & Edge browsers · Arduino required</p>
+    </footer>
+
+    <script>
+        let port;
+        let writer;
+        const connectBtn = document.getElementById('connectBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const textInput = document.getElementById('textInput');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const charCount = document.getElementById('charCount');
+
+        // Character counter
+        textInput.addEventListener('input', () => {
+            charCount.textContent = textInput.value.length;
+        });
+
+        // Check browser support
+        if (!('serial' in navigator)) {
+            statusText.textContent = 'UNSUPPORTED';
+            connectBtn.disabled = true;
+        }
+
+        // Connect/Disconnect
+        connectBtn.addEventListener('click', async () => {
+            if (port && port.readable) {
+                await disconnect();
+            } else {
+                await connect();
+            }
+        });
+
+        // Send message
+        sendBtn.addEventListener('click', async () => {
+            const text = textInput.value.trim().toUpperCase();
+            if (!text) return;
+            await sendToArduino(text);
+        });
+
+        // Enter to send
+        textInput.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter' && !e.shiftKey && port && port.readable) {
+                e.preventDefault();
+                sendBtn.click();
+            }
+        });
+
+        async function connect() {
+            try {
+                port = await navigator.serial.requestPort();
+                await port.open({ baudRate: 9600 });
+                writer = port.writable.getWriter();
+
+                // Update UI
+                statusDot.classList.add('connected');
+                statusText.textContent = 'CONNECTED';
+                connectBtn.textContent = 'Disconnect';
+                connectBtn.classList.add('connected');
+                sendBtn.disabled = false;
+                textInput.focus();
+
+            } catch (error) {
+                console.error('Connection error:', error);
+            }
+        }
+
+        async function disconnect() {
+            try {
+                if (writer) {
+                    writer.releaseLock();
+                }
+                
+                if (port) {
+                    await port.close();
+                    port = null;
+                }
+
+                // Update UI
+                statusDot.classList.remove('connected');
+                statusText.textContent = 'OFFLINE';
+                connectBtn.innerHTML = '<span>Connect Device</span>';
+                connectBtn.classList.remove('connected');
+                sendBtn.disabled = true;
+
+            } catch (error) {
+                console.error('Disconnect error:', error);
+            }
+        }
+
+        async function sendToArduino(text) {
+            try {
+                const data = text + '\n';
+                await writer.write(new TextEncoder().encode(data));
+                
+                // Visual feedback
+                const originalHTML = sendBtn.innerHTML;
+                sendBtn.innerHTML = '<span>Sent ✓</span>';
+                sendBtn.style.opacity = '0.7';
+                
+                setTimeout(() => {
+                    sendBtn.innerHTML = originalHTML;
+                    sendBtn.style.opacity = '1';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Send error:', error);
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', async () => {
+            if (port) {
+                await disconnect();
+            }
+        });
+    </script>
+</body>
+</html>
