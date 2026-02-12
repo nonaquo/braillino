@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Braillino — Text to Braille Converter</title>
+    <title>braillino</title>
+    <link rel="icon" type="image/png" href="apple-touch-icon.png">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -192,33 +193,53 @@
             opacity: 0.8;
         }
 
-        /* Category Nav */
-        .category-nav {
-            background: var(--cream);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            border-bottom: 3px solid var(--brown);
-            flex-wrap: wrap;
-        }
+        /* Category Nav - Scrolling */
+.category-nav {
+    background: var(--cream);
+    padding: 20px 0;
+    border-bottom: 3px solid var(--brown);
+    overflow: hidden;
+    position: relative;
+}
 
-        .category-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-weight: 600;
-            color: var(--brown);
-        }
+.category-scroll {
+    display: flex;
+    animation: scrollCategory 20s linear infinite;
+}
 
-        .category-item::before {
-            content: '✿';
-            font-size: 16px;
-            color: var(--brown);
-        }
+.category-content {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    padding: 0 30px;
+    white-space: nowrap;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--brown);
+}
+
+.category-item::before {
+    content: '✿';
+    font-size: 16px;
+    color: var(--brown);
+}
+
+@keyframes scrollCategory {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
 
         /* Main Content */
         .main-section {
@@ -537,26 +558,30 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-left">
-            <a href="how-it-works.html">How It Works</a>
-            <a href="about.html">About</a>
+ <!-- Navigation -->
+<nav>
+    <div class="nav-left">
+        <a href="how-it-works.html">How It Works</a>
+        <a href="about.html">About</a>
+    </div>
+    <div class="logo">
+        <a href="index.html">
+            <img src="logobraille.png" alt="Braillino" style="height: 40px; width: auto;">
+        </a>
+    </div>
+    <div class="nav-right">
+        <div class="status-badge">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">OFFLINE</span>
         </div>
-        <div class="logo"><a href="index.html" style="color: var(--cream); text-decoration: none;">braillino</a></div>
-        <div class="nav-right">
-            <div class="status-badge">
-                <div class="status-dot" id="statusDot"></div>
-                <span id="statusText">OFFLINE</span>
-            </div>
-        </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-tag">Text to Braille Converter</div>
-            <h1>words, made<br>accesible by touch. ✿</h1>
+            <h1>Words, made<br>accesible by touch. ✿</h1>
             <p class="hero-subtitle">
                 Transform your messages into tactile Braille patterns
             </p>
@@ -565,11 +590,29 @@
 
     <!-- Category Nav -->
     <div class="category-nav">
-        <div class="category-item">Connect</div>
-        <div class="category-item">Type</div>
-        <div class="category-item">Convert</div>
-        <div class="category-item">Feel</div>
+    <div class="category-scroll">
+        <div class="category-content">
+            <div class="category-item">Connect</div>
+            <div class="category-item">Type</div>
+            <div class="category-item">Convert</div>
+            <div class="category-item">Feel</div>
+            <div class="category-item">Connect</div>
+            <div class="category-item">Type</div>
+            <div class="category-item">Convert</div>
+            <div class="category-item">Feel</div>
+        </div>
+        <div class="category-content">
+            <div class="category-item">Connect</div>
+            <div class="category-item">Type</div>
+            <div class="category-item">Convert</div>
+            <div class="category-item">Feel</div>
+            <div class="category-item">Connect</div>
+            <div class="category-item">Type</div>
+            <div class="category-item">Convert</div>
+            <div class="category-item">Feel</div>
+        </div>
     </div>
+</div>
 
     <!-- Main Content -->
     <section class="main-section">
@@ -632,7 +675,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>© 2024 Braillino · Works with Chrome & Edge browsers · Arduino required</p>
+        <p>© 2026 Braillino · Works with Chrome & Edge browsers · Arduino required</p>
     </footer>
 
     <script>
