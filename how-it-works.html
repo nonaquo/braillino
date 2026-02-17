@@ -78,6 +78,11 @@
             border-bottom: 3px solid var(--brown);
             position: relative;
             overflow: hidden;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .hero::before {
@@ -115,12 +120,35 @@
         }
 
         .subtitle {
-            font-size: 18px;
-            max-width: 600px;
+            font-size: 17px;
+            max-width: 720px;
             margin: 0 auto;
-            opacity: 0.8;
+            opacity: 0.85;
             position: relative;
             z-index: 1;
+            line-height: 1.8;
+            min-height: 120px;
+            text-align: center;
+        }
+
+        /* Blinking cursor */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: var(--brown);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.7s step-end infinite;
+        }
+
+        .cursor.hidden {
+            display: none;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .content {
@@ -347,18 +375,18 @@
             <a href="how-it-works.html">How It Works</a>
             <a href="about.html">About</a>
         </div>
-       <div class="logo">
-    <a href="index.html">
-        <img src="logobraille.png" alt="Braillino" style="height: 40px; width: auto;">
-    </a>
-</div>
+        <div class="logo">
+            <a href="index.html">
+                <img src="logobraille.png" alt="Braillino" style="height: 40px; width: auto;">
+            </a>
+        </div>
         <div style="width: 120px;"></div>
     </nav>
 
     <section class="hero">
         <h1>How It Works</h1>
         <p class="subtitle">
-            Transform your text into tactile Braille in four simple steps
+            <span id="typed-text"></span><span class="cursor" id="cursor"></span>
         </p>
     </section>
 
@@ -417,7 +445,7 @@
                     <ul>
                         <li>The servos will move to form each letter in Braille</li>
                         <li>Each character displays for 4 seconds</li>
-                        <li>Double letters (like "LL" in HELLO) show a brief gap</li>
+                        <li>A short pause is added between repeated characters for clarity</li>
                         <li>After the word finishes, enter a new message to continue</li>
                     </ul>
                 </div>
@@ -452,5 +480,51 @@
     <footer>
         <p>© 2026 Braillino · Making text accessible through touch</p>
     </footer>
+
+    <script>
+        const boldItalicText = "Transform your text into tactile Braille in four simple steps.";
+        const normalText = " Braillino converts digital text into raised Braille characters using an Arduino-controlled motor-driven mini display. Through a web-based interface, users can input text which is then processed, translated into Braille patterns, and physically displayed through moving pins. This system allows visually impaired users to experience text through touch in a clear, interactive, and accessible way.";
+
+        const typedEl = document.getElementById('typed-text');
+        const cursor = document.getElementById('cursor');
+
+        const speed = 22;
+        let i = 0;
+        let phase = 1; // phase 1 = bold italic, phase 2 = normal
+
+        // Create the bold+italic span
+        const boldSpan = document.createElement('span');
+        boldSpan.style.fontWeight = 'bold';
+        boldSpan.style.fontStyle = 'italic';
+        typedEl.appendChild(boldSpan);
+
+        // Create the normal span
+        const normalSpan = document.createElement('span');
+        typedEl.appendChild(normalSpan);
+
+        function type() {
+            if (phase === 1) {
+                if (i < boldItalicText.length) {
+                    boldSpan.textContent += boldItalicText.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    phase = 2;
+                    i = 0;
+                    setTimeout(type, speed);
+                }
+            } else {
+                if (i < normalText.length) {
+                    normalSpan.textContent += normalText.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    cursor.classList.add('hidden');
+                }
+            }
+        }
+
+        setTimeout(type, 600);
+    </script>
 </body>
 </html>

@@ -78,6 +78,11 @@
             border-bottom: 3px solid var(--brown);
             position: relative;
             overflow: hidden;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .hero::before {
@@ -115,12 +120,34 @@
         }
 
         .subtitle {
-            font-size: 18px;
-            max-width: 600px;
+            font-size: 17px;
+            max-width: 720px;
             margin: 0 auto;
-            opacity: 0.8;
+            opacity: 0.85;
             position: relative;
             z-index: 1;
+            line-height: 1.8;
+            min-height: 120px;
+            text-align: center;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: var(--brown);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.7s step-end infinite;
+        }
+
+        .cursor.hidden {
+            display: none;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .content {
@@ -153,7 +180,7 @@
 
         .values-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 32px;
             margin-bottom: 60px;
         }
@@ -163,6 +190,13 @@
             padding: 40px;
             border: 3px solid var(--brown);
             text-align: center;
+        }
+
+        .value-card:nth-child(3) {
+            grid-column: 1 / -1;
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .value-card h3 {
@@ -285,6 +319,10 @@
             .values-grid {
                 grid-template-columns: 1fr;
             }
+
+            .value-card:nth-child(3) {
+                grid-column: 1;
+            }
         }
 
         @keyframes fadeInUp {
@@ -317,6 +355,117 @@
             animation: fadeInUp 0.6s ease 0.4s forwards;
             opacity: 0;
         }
+
+        .team-section {
+            background: var(--pink);
+            padding: 80px 60px;
+            text-align: center;
+            border: 3px solid var(--brown);
+            box-shadow: 12px 12px 0 rgba(58, 47, 47, 0.1);
+            margin-top: 60px;
+            animation: fadeInUp 0.6s ease 0.5s forwards;
+            opacity: 0;
+        }
+
+        .team-section h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 42px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .team-intro {
+            font-size: 18px;
+            opacity: 0.8;
+            margin-bottom: 48px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .team-member:nth-child(7) {
+            grid-column: 2;
+        }
+
+        .photo-frame {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            border: 4px solid var(--brown);
+            background: white;
+            padding: 8px;
+            box-shadow: 8px 8px 0 rgba(58, 47, 47, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .photo-frame:hover {
+            transform: translateY(-8px);
+            box-shadow: 12px 12px 0 rgba(58, 47, 47, 0.2);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .team-member h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .team-member .role {
+            font-size: 14px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .team-member .desc-card {
+            margin-top: 12px;
+            background: white;
+            border: 2px solid var(--brown);
+            padding: 12px 16px;
+            font-size: 13px;
+            line-height: 1.6;
+            opacity: 0.85;
+            box-shadow: 4px 4px 0 rgba(58, 47, 47, 0.1);
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .team-section {
+                padding: 40px 24px;
+            }
+
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+
+            .team-member:nth-child(7) {
+                grid-column: 1 / -1;
+            }
+
+            .photo-frame {
+                width: 150px;
+                height: 150px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -326,17 +475,17 @@
             <a href="about.html">About</a>
         </div>
         <div class="logo">
-    <a href="index.html">
-        <img src="logobraille.png" alt="Braillino" style="height: 40px; width: auto;">
-    </a>
-</div>
+            <a href="index.html">
+                <img src="logobraille.png" alt="Braillino" style="height: 40px; width: auto;">
+            </a>
+        </div>
         <div style="width: 120px;"></div>
     </nav>
 
     <section class="hero">
         <h1>About Braillino</h1>
         <p class="subtitle">
-            Bridging the gap between digital text and tactile Braille
+            <span id="typed-text"></span><span class="cursor" id="cursor"></span>
         </p>
     </section>
 
@@ -344,13 +493,13 @@
         <div class="story">
             <h2>Our Story</h2>
             <p>
-                Braillino was created with a simple but powerful goal: to make text accessible through touch. 
-                We believe that everyone should be able to experience written words in a way that works for them.
+                During the pandemic, students were deprived of the liberty to socialize and experience the outside world. 
+                However, technology shed light on these dark times. Many relied on technology, social media, and other online activities to stay connected with others and tend to their academic responsibilities. 
+                Although effective, it left a lasting impact on their eyesight. A classmate of ours shared his personal experience.
             </p>
             <p>
-                By combining Arduino hardware with an intuitive web interface, we've made it possible for 
-                anyone to convert digital text into physical Braille patterns instantly. What started as 
-                a project has grown into a tool that brings words to life through technology.
+                Throughout his high school years, he noticed his vision was gradually worsening. From minor inconveniences such as having to reread food packaging labels, to completely losing the ability to read without prescription glasses. 
+                As he simply put it, "I could not read without it, and I don't know what I would do without it." Our subjects, namely, Practical Research, Capstone, and Inquiries, Immersion, and Investigation has provided us an opportunity to make a difference.
             </p>
         </div>
 
@@ -389,10 +538,125 @@
                 <span class="tech-item">Braille Grade 1</span>
             </div>
         </div>
+
+        <div class="team-section">
+            <h2>Meet the Team</h2>
+            <p class="team-intro">The passionate minds behind Braillino</p>
+            <div class="team-grid">
+
+                <div class="team-member">
+                    <div class="photo-frame">
+                        <img src="basto.jpg" alt="Daniel Basto">
+                    </div>
+                    <h3>Daniel Basto</h3>
+                    <p class="role">Team Leader</p>
+                    <div class="desc-card">Led the team and coordinated overall progress. Assisted in documentation, coding and paper preparation.</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="photo-frame">
+                        <img src="asuncion.jpeg" alt="Franchesca Asuncion">
+                    </div>
+                    <h3>Franchesca Asuncion</h3>
+                    <p class="role">Assistant Team Leader & Lead Developer</p>
+                    <div class="desc-card">Served as Assistant Team Leader and lead coder for the project. Contributed to the development of the physical prototype case and played a key role in writing and editing the research papers.</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="photo-frame">
+                        <img src="serenio.jpg" alt="Ephraim Serenio">
+                    </div>
+                    <h3>Ephraim Serenio</h3>
+                    <p class="role">Lead Developer & Website Editor</p>
+                    <div class="desc-card">Served as a lead coder for the project. Assisted in paper development and managed the website's content and updates.</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="photo-frame">
+                        <img src="gomba.jpeg" alt="Zhen Gomba">
+                    </div>
+                    <h3>Zhen Gomba</h3>
+                    <p class="role">Prototype Development & Documentation</p>
+                    <div class="desc-card">Supported the building and refinement of the physical prototype case. Contributed to drafting and improving the research papers.</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="photo-frame">
+                        <img src="mazaredo.jpeg" alt="Marc Mazaredo">
+                    </div>
+                    <h3>Marc Mazaredo</h3>
+                    <p class="role">Prototype Development & Documentation</p>
+                    <div class="desc-card">Assisted in assembling the physical prototype case and contributed to research writing and documentation.</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="photo-frame">
+                        <img src="reyes.jpeg" alt="Keisha Reyes">
+                    </div>
+                    <h3>Keisha Reyes</h3>
+                    <p class="role">Prototype Development & Documentation</p>
+                    <div class="desc-card">Contributed to the construction and development of the physical prototype case. Assisted in writing and organizing the research papers.</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="photo-frame">
+                        <img src="mendoza.jpeg" alt="Mharc Mendoza">
+                    </div>
+                    <h3>Mharc Mendoza</h3>
+                    <p class="role">Supporting Contributor</p>
+                    <div class="desc-card">Provided limited assistance with paper preparation and supported the team in selected tasks.</div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
     <footer>
         <p>© 2026 Braillino · Making text accessible through touch</p>
     </footer>
+
+    <script>
+        const boldItalicText = "Bridging the gap between digital text and tactile Braille.";
+        const normalText = "\nBraillino is an Arduino-based Braille e-reader designed to make digital text accessible to visually impaired individuals. It transforms written content into tactile Braille using a motor-driven mini display, allowing users to read through touch rather than sight. Developed with affordability, portability, and usability in mind, Braillino aims to support inclusive learning and promote independence by providing a practical assistive technology solution.";
+
+        const typedEl = document.getElementById('typed-text');
+        const cursor = document.getElementById('cursor');
+
+        const speed = 22;
+        let i = 0;
+        let phase = 1;
+
+        const boldSpan = document.createElement('span');
+        boldSpan.style.fontWeight = 'bold';
+        boldSpan.style.fontStyle = 'italic';
+        typedEl.appendChild(boldSpan);
+
+        const normalSpan = document.createElement('span');
+        typedEl.appendChild(normalSpan);
+
+        function type() {
+            if (phase === 1) {
+                if (i < boldItalicText.length) {
+                    boldSpan.textContent += boldItalicText.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    phase = 2;
+                    i = 0;
+                    setTimeout(type, speed);
+                }
+            } else {
+                if (i < normalText.length) {
+                    normalSpan.textContent += normalText.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    cursor.classList.add('hidden');
+                }
+            }
+        }
+
+        setTimeout(type, 600);
+    </script>
 </body>
 </html>
